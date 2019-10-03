@@ -48,6 +48,17 @@ int getData( int sockfd ) {
 int main(int argc, char *argv[])
 {
     int sockfd, portno = 51717, n;
+
+    // Create socket
+    int network_socket = socket(AF_INET,SOCK_STREAM,0)
+
+
+
+
+
+
+
+
     char serverIp[] = "169.254.0.2";
     struct sockaddr_in serv_addr;
     struct hostent *server;
