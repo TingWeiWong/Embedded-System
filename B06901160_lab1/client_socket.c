@@ -121,13 +121,31 @@ int main(int argc, char *argv[])
       printf("Error connecting to server\n");
     }
 
-    int n;
+    char server_response[256];
 
-    sendInt(network_socket, 10);
+    recv(network_socket, &server_response,sizeof(server_response),0);
 
-    int result;
+    int test;
 
-    result = getInt(n);
+    test = 3;
+
+    sendInt(network_socket,test);
+
+    int data;
+
+    data = getInt(network_socket);
+
+    printf("%s\n", server_response);
+
+    printf("Data = %d\n", data);
+
+    // int n;
+
+    // sendInt(network_socket, 10);
+
+    // int result;
+
+    // result = getInt(network_socket);
 
 
     // sorted = getArray(network_socket);

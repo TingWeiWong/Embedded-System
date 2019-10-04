@@ -1,0 +1,22 @@
+#The following four macros should be defined.
+TARGET1=socket_server
+OBJECT1=own_server.o
+TARGET2=clinet_socket
+OBJECT2=own_client.o
+CC=gcc
+CXX=g++
+LD_FLAGS=
+C_FLAGS=
+# end of user configuration
+all: $(TARGET1) $(TARGET2)
+$(TARGET1) : $(OBJECT1)
+		$(CXX) $(LD_FLAGS) $^ -o $@
+$(TARGET2) : $(OBJECT2)
+		$(CXX) $(LD_FLAGS) $^ -o $@
+%.o : %.c
+		$(CC) $(C_FLAGS) -c $<
+%.o : %.cpp
+		$(CXX) $(C_FLAGS) -c $<
+.PHONY: clean
+clean :
+		-rm -f $(OBJECT1)  $(OBJECT2) $(TARGET1) $(TARGET2)
