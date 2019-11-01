@@ -29,7 +29,7 @@ try:
     testService= dev.getServiceByUUID("F0001121-0415-4000-B000-000000000000")
     for ch in testService.getCharacteristics():
 	print str(ch)
-    ch= dev.getCharacteristics(uuid=UUID(0xfff1))[0]
+    ch= dev.getCharacteristics(uuid="F0001122-0415-4000-B000-000000000000")[0]
     if (ch.supportsRead()):
 	print ch.read()
 finally:
