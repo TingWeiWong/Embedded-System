@@ -21,7 +21,7 @@ number = input('Enter your device number: ')
 print('Device', number)
 print(devices[number].addr)
 print "Connecting..."
-dev = Peripheral(devices[number].addr, 'random')
+dev = Peripheral(devices[number].addr, 'public')
 print "Services..."
 for svc in dev.services:
     print str(svc)
