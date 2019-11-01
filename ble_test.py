@@ -21,12 +21,12 @@ number = input('Enter your device number: ')
 print('Device', number)
 print(devices[number].addr)
 print "Connecting..."
-dev = Peripheral(devices[number].addr, 'random')
+dev = Peripheral(devices[number].addr, 'public')
 print "Services..."
 for svc in dev.services:
     print str(svc)
 try:
-    testService= dev.getServiceByUUID(UUID(0xfff0))
+    testService= dev.getServiceByUUID("F0001121-0415-4000-B000-000000000000")
     for ch in testService.getCharacteristics():
 	print str(ch)
     ch= dev.getCharacteristics(uuid=UUID(0xfff1))[0]
