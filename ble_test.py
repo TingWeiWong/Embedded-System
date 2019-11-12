@@ -2,21 +2,25 @@
 from bluepy.btle import Peripheral, UUID
 from bluepy.btle import Scanner, DefaultDelegate
 class ScanDelegate(DefaultDelegate):
-    def __init__(self):
-	DefaultDelegate.__init__(self)
-    def handleDiscovery(self, dev, isNewDev, isNewData):
-	if isNewDev:
-	    print "Discovered device", dev.addr
-	elif isNewData:
-	    print "Received new data from", dev.addr
+	def __init__(self):
+		DefaultDelegate.__init__(self)
+	def handleDiscovery(self, dev, isNewDev, isNewData):
+		if isNewDev:
+			print "Discovered device", dev.addr
+		elif isNewData:
+			print "Received new data from", dev.addr
+
+	def handleNotification(self, cHandle, data):
+		self.data = '\x01\x00'
+
 scanner = Scanner().withDelegate(ScanDelegate())
 devices = scanner.scan(10.0)
 n=0
 for dev in devices:
-    print "%d: Device %s (%s), RSSI=%d dB" % (n, dev.addr, dev.addrType, dev.rssi)
-    n += 1
-    for (adtype, desc, value) in dev.getScanData():
-	print "  %s = %s" % (desc, value)
+	print "%d: Device %s (%s), RSSI=%d dB" % (n, dev.addr, dev.addrType, dev.rssi)
+	n += 1
+	for (adtype, desc, value) in dev.getScanData():
+		print "  %s = %s" % (desc, value)
 number = input('Enter your device number: ')
 print('Device', number)
 print(devices[number].addr)
@@ -24,13 +28,21 @@ print "Connecting..."
 dev = Peripheral(devices[number].addr, 'public')
 print "Services..."
 for svc in dev.services:
-    print str(svc)
+	print str(svc)
 try:
-    testService= dev.getServiceByUUID("f0001120-0415-4000-B000-000000000000")
-    for ch in testService.getCharacteristics():
-	print str(ch)
-    ch= dev.getCharacteristics(uuid="f0001121-0415-4000-B000-000000000000")[0]
-    if (ch.supportsRead()):
-	print ch.read()
+	while True:
+		if dev.waitForNotifications(1.0):
+			continue
+		print ("wait")
+		testService= dev.getServiceByUUID("f0001130-0451-4000-B000-000000000000")
+		for ch in testService.getCharacteristics():
+			print str(ch)
+
+		# while True:
+		dev.writeCharacteristic(38,'\x00',True)
+		# 	# print ("ch.read() = ",ch.read())
+		ch= dev.getCharacteristics(uuid="f0001131-0451-4000-B000-000000000000")[0]
+		if (ch.supportsRead()):
+			print ("ch.read = ",ch.read()+'\n')
 finally:
-    dev.disconnect()
+	dev.disconnect()
