@@ -30,6 +30,14 @@ print "Services..."
 for svc in dev.services:
 	print str(svc)
 try:
+<<<<<<< HEAD
+    testService= dev.getServiceByUUID("f0001110-0415-4000-B000-000000000000")
+    for ch in testService.getCharacteristics():
+	print str(ch)
+    ch= dev.getCharacteristics(uuid="f0001111-0415-4000-B000-000000000000")[0]
+    if (ch.supportsRead()):
+	print ch.read()
+=======
 	while True:
 		if dev.waitForNotifications(1.0):
 			continue
@@ -44,5 +52,6 @@ try:
 		ch= dev.getCharacteristics(uuid="f0001131-0451-4000-B000-000000000000")[0]
 		if (ch.supportsRead()):
 			print ("ch.read = ",ch.read()+'\n')
+>>>>>>> 2383336aa5fbb9a6a1cbef501d469e7324d85762
 finally:
 	dev.disconnect()
