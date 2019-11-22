@@ -48,21 +48,21 @@ void led_thread(void const *name) {
                 LD2_TOG;
                 wait(led_delay);
                 pc.printf("led2\n");
-                if(botton_switch % 2 == 1)
+                if(botton_switch % 3 == 0)
                     break;
             }
             else if (*((int*)name) == 3) {
                 LD3_TOG;
                 wait(led_delay);
                 pc.printf("led3\n");
-                if (botton_switch % 2 == 0)
+                if (botton_switch % 3 == 1)
                     break;
             }
             else if (*((int*)name) == 4) {
                 LD4_TOG;
                 wait(led_delay);
                 pc.printf("led4\n");
-                if (botton_switch % 2 == 1)
+                if (botton_switch % 3 == 2)
                     break;
             }
         }
