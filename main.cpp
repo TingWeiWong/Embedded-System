@@ -245,7 +245,6 @@ int main()
         printf("myled = %d \n\r",myled.read() );
         wait(0.5);
     }
+    return 0;
     }
 
-    return 0;
-}
