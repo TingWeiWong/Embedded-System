@@ -1,5 +1,5 @@
 /* mbed Microcontroller Library
- * Copyright (c) 2006-2015 ARM Limited
+ * Copyright (c) 2006-2013 ARM Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,124 +17,53 @@
 #include <events/mbed_events.h>
 #include <mbed.h>
 #include "ble/BLE.h"
+#include "LEDService.h"
 #include "pretty_printer.h"
+#include <iostream>
 
-static events::EventQueue event_queue(/* event count */ 16 * EVENTS_EVENT_SIZE);
+const static char DEVICE_NAME[] = "Automatic firearm";
 
-/** @deprecated This demo is deprecated and no replacement is currently available.
- */
-MBED_DEPRECATED_SINCE(
-   "mbed-os-5.11",
-   "This demo is deprecated and no replacement is currently available."
-)
-class BeaconDemo : ble::Gap::EventHandler {
+static EventQueue event_queue(/* event count */ 10 * EVENTS_EVENT_SIZE);
+
+DigitalOut relay(D6);
+
+
+class LEDDemo : ble::Gap::EventHandler {
 public:
-    BeaconDemo(BLE &ble, events::EventQueue &event_queue) :
+    LEDDemo(BLE &ble, events::EventQueue &event_queue) :
         _ble(ble),
         _event_queue(event_queue),
+        _alive_led(LED1, 1),
+        _actuated_led(LED2, 0),
+        _led_uuid(LEDService::LED_SERVICE_UUID),
+        _led_service(NULL),
         _adv_data_builder(_adv_buffer) { }
+
+    ~LEDDemo() {
+        delete _led_service;
+    }
 
     void start() {
         _ble.gap().setEventHandler(this);
 
-        _ble.init(this, &BeaconDemo::on_init_complete);
+        _ble.init(this, &LEDDemo::on_init_complete);
+
+        _event_queue.call_every(500, this, &LEDDemo::blink);
 
         _event_queue.dispatch_forever();
     }
 
 private:
-    /**
-     * iBeacon payload builder.
-     *
-     * This data structure contains the payload of an iBeacon. The payload is
-     * built at construction time and application code can set up an iBeacon by
-     * injecting the raw field into the GAP advertising payload as a
-     * GapAdvertisingData::MANUFACTURER_SPECIFIC_DATA.
-     */
-    union Payload {
-        /**
-         * Raw data of the payload.
-         */
-        uint8_t raw[25];
-        struct {
-            /**
-             * Beacon manufacturer identifier.
-             */
-            uint16_t companyID;
-
-            /**
-             * Packet ID; Equal to 2 for an iBeacon.
-             */
-            uint8_t ID;
-
-            /**
-             * Length of the remaining data presents in the payload.
-             */
-            uint8_t len;
-
-            /**
-             * Beacon UUID.
-             */
-            uint8_t proximityUUID[16];
-
-            /**
-             * Beacon Major group ID.
-             */
-            uint16_t majorNumber;
-
-            /**
-             * Beacon minor ID.
-             */
-            uint16_t minorNumber;
-
-            /**
-             * Tx power received at 1 meter; in dBm.
-             */
-            uint8_t txPower;
-        };
-
-        /**
-         * Assemble an iBeacon payload.
-         *
-         * @param[in] uuid Beacon network ID. iBeacon operators use this value
-         * to group their iBeacons into a single network, a single region and
-         * identify their organization among others.
-         *
-         * @param[in] majNum Beacon major group ID. iBeacon exploitants may use
-         * this field to divide the region into subregions, their network into
-         * subnetworks.
-         *
-         * @param[in] minNum Identifier of the Beacon in its subregion.
-         *
-         * @param[in] transmitPower Measured transmit power of the beacon at 1
-         * meter. Scanners use this parameter to approximate the distance
-         * to the beacon.
-         *
-         * @param[in] companyIDIn ID of the beacon manufacturer.
-         */
-        Payload(
-            const uint8_t *uuid,
-            uint16_t majNum,
-            uint16_t minNum,
-            uint8_t transmitPower,
-            uint16_t companyIDIn
-        ) : companyID(companyIDIn),
-            ID(0x02),
-            len(0x15),
-            majorNumber(__REV16(majNum)),
-            minorNumber(__REV16(minNum)),
-            txPower(transmitPower)
-        {
-            memcpy(proximityUUID, uuid, 16);
-        }
-    };
-
     /** Callback triggered when the ble initialization process has finished */
     void on_init_complete(BLE::InitializationCompleteCallbackContext *params) {
         if (params->error != BLE_ERROR_NONE) {
             printf("Ble initialization failed.");
             return;
         }
+
+        _led_service = new LEDService(_ble, false);
+
+        _ble.gattServer().onDataWritten(this, &LEDDemo::on_data_written);
 
         print_mac_address();
 
@@ -150,25 +79,8 @@ private:
         );
 
         _adv_data_builder.setFlags();
-
-        /**
-         * The Beacon payload has the following composition:
-         * 128-Bit / 16byte UUID = E2 0A 39 F4 73 F5 4B C4 A1 2F 17 D1 AD 07 A9 61
-         * Major/Minor  = 0x1122 / 0x3344
-         * Tx Power     = 0xC8 = 200, 2's compliment is 256-200 = (-56dB)
-         *
-         * Note: please remember to calibrate your beacons TX Power for more accurate results.
-         */
-        static const uint8_t uuid[] = { 0xE2, 0x0A, 0x39, 0xF4, 0x73, 0xF5, 0x4B, 0xC4,
-                                        0xA1, 0x2F, 0x17, 0xD1, 0xAD, 0x07, 0xA9, 0x61 };
-        uint16_t major_number = 1122;
-        uint16_t minor_number = 3344;
-        uint16_t tx_power     = 0xC8;
-        uint16_t comp_id      = 0x004C;
-
-        Payload ibeacon(uuid, major_number, minor_number, tx_power, comp_id);
-
-        _adv_data_builder.setManufacturerSpecificData(ibeacon.raw);
+        _adv_data_builder.setLocalServiceList(mbed::make_Span(&_led_uuid, 1));
+        _adv_data_builder.setName(DEVICE_NAME);
 
         /* Setup advertising */
 
@@ -178,7 +90,7 @@ private:
         );
 
         if (error) {
-            print_error(error, "_ble.gap().setAdvertisingParameters() failed");
+            printf("_ble.gap().setAdvertisingParameters() failed\r\n");
             return;
         }
 
@@ -188,7 +100,7 @@ private:
         );
 
         if (error) {
-            print_error(error, "_ble.gap().setAdvertisingPayload() failed");
+            printf("_ble.gap().setAdvertisingPayload() failed\r\n");
             return;
         }
 
@@ -197,9 +109,32 @@ private:
         error = _ble.gap().startAdvertising(ble::LEGACY_ADVERTISING_HANDLE);
 
         if (error) {
-            print_error(error, "_ble.gap().startAdvertising() failed");
+            printf("_ble.gap().startAdvertising() failed\r\n");
             return;
         }
+    }
+
+    /**
+     * This callback allows the LEDService to receive updates to the ledState Characteristic.
+     *
+     * @param[in] params Information about the characterisitc being updated.
+     */
+    void on_data_written(const GattWriteCallbackParams *params) {
+        if ((params->handle == _led_service->getValueHandle()) && (params->len == 1)) {
+            _actuated_led = *(params->data);
+            relay = *(params->data);
+            cout << "relay = " << relay << endl;
+            // cout << "*params->data = " << *(params->data) << endl;
+            // cout << "params->data = " << (params->data) << endl;
+            // cout << "params->len = " << (params->len) << endl;
+            cout << "actuated led = " << _actuated_led << endl;
+
+
+        }
+    }
+
+    void blink() {
+        _alive_led = !_alive_led;
     }
 
 private:
@@ -212,6 +147,12 @@ private:
 private:
     BLE &_ble;
     events::EventQueue &_event_queue;
+    DigitalOut _alive_led;
+    DigitalOut _actuated_led;
+  
+
+    UUID _led_uuid;
+    LEDService *_led_service;
 
     uint8_t _adv_buffer[ble::LEGACY_ADVERTISING_MAX_SIZE];
     ble::AdvertisingDataBuilder _adv_data_builder;
@@ -223,28 +164,29 @@ void schedule_ble_events(BLE::OnEventsToProcessCallbackContext *context) {
 }
 
 
-// Add GPIO outputs test with LED
-DigitalOut myled(LED1);
-
-
-
 int main()
 {
+    relay = 1;
     BLE &ble = BLE::Instance();
     ble.onEventsToProcess(schedule_ble_events);
 
-    BeaconDemo demo(ble, event_queue);
+    std::cout << "After on Events" << endl;
+
+    LEDDemo demo(ble, event_queue);
+
+    std::cout << "After demo " << endl;
+    std::cout << "BLE = " << (&ble) << endl;
+    // std::cout << "BLE data = " << ble.data << endl;
+    // printf("%d", ble);
     demo.start();
 
-    while (1) {
-        myled = 1;          // set LED1 pin to high
-        printf("myled = %d \n\r", (uint8_t)myled );
-        wait(0.5);
 
-        myled.write(0);     // set LED1 pin to low
-        printf("myled = %d \n\r",myled.read() );
-        wait(0.5);
-    }
+
+    // relay = 1;
+    // wait(1);
+    // relay = 0;
+    // wait(1);
+
     return 0;
-    }
+}
 
