@@ -1,14 +1,14 @@
-# 兩輪自走平衡車
+# Automatic Firearm 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_1481.jpg" width="70%" height="70%">
 </p> 
 
-## 動機
+## Motivation
 
 一般四輪車為車子的縮版，雖然具備馬力較強移動速度較快等優點，但實際需要靈活操作技巧的工作，其操作技巧難易度遠遠遜色於兩輪車，且兩輪車續航力較高，走路起來也較像人類兩條腿的走路方式，因此我們這一組想實踐兩輪車的實際製作，但這堂課的重點顯然不是在硬體製作，因此我們買來現有的平衡車，去對他做平衡性能的優化，以及加上我們的遇到障礙物被擋住後，相機開啟偵測方向的功能。
 
-## 架構
+## Structure
 
 裝有MPU6050，透過Kalman Filter的值使量出的加速度更精準，以及GB37帶測速馬達，和馬達驅動機TB6612FNG，使左右兩輪的值給的相同，如有速度偏差容易造成小車平衡不穩，容易翻倒，最重要的裝上藍芽接收器HC-06，實現和RPi溝通
 
@@ -88,7 +88,7 @@ RPI是跑不起來伺服馬達的，後面接了電池座再接一個降壓穩�
 
 ## 成果
 
-1. 介紹影片
+1. Demo Video
 
 [![Demo1](https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_3312.png)](https://www.youtube.com/watch?v=gLq52RHsBsU)
 
@@ -96,7 +96,7 @@ RPI是跑不起來伺服馬達的，後面接了電池座再接一個降壓穩�
 
 [![Demo2](https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_1313.png)](https://www.youtube.com/watch?v=SOX47pxRJZg&feature=youtu.be)
 
-## 參考資料
+## Reference
 
 1. [51單片機平衡小車](https://item.taobao.com/item.htm?spm=a211ha.10565794.0.0.3cd53ca9aoSh6g&id=42913336181)
 
