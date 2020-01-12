@@ -25,8 +25,38 @@ alarms owner of trespassers.
 </p> 
 
 ### DC Motor
-	* STM32 GPIO library with digital output
-	* Use relay to turn on/off motor
+    * STM32 GPIO library with digital output
+    * Use relay to turn on/off motor
+
+
+```
+    void on_data_written(const GattWriteCallbackParams *params) {
+        if ((params->handle == _led_service->getValueHandle()) && (params->len == 1)) {
+            _actuated_led = *(params->data);
+            // \control = *(params->data);
+            relay = *(params->data);
+            // while (control == 1) {
+            //     for (int i = 0; i < 20; i++) {
+            //         relay = i % 2;
+            //         if (relay == 1) {
+            //             wait(1);
+            //         }
+            //         else {
+            //             wait(0.075);
+            //         }
+            //     }
+            //     control = 0;
+            //     relay = 1;
+            // }
+            cout << "relay = " << relay << endl;
+            // cout << "*params->data = " << *(params->data) << endl;
+            // cout << "params->data = " << (params->data) << endl;
+            // cout << "params->len = " << (params->len) << endl;
+            cout << "actuated led = " << _actuated_led << endl;
+
+
+        }
+```
 ### Cardboard Gun
 
 ### Grove PIR Sensor
