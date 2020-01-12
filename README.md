@@ -4,7 +4,6 @@
   <img src="Cardboard-Gun.jpg">
 </p> 
 
-![Image test](https://github.com/TingWeiWong/Embedded-System/blob/master/Cardboard-Gun.jpg)
 
 ## Motivation
 
@@ -23,7 +22,7 @@ alarms owner of trespassers and attacks accordingly.
 ## Structure
 
 <p align="center">
-  <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/block-diagram.png" width="100%" height="100%">
+  <img src="block-diagram.png" width="100%" height="100%">
 </p> 
 
 ### DC Motor
@@ -144,7 +143,7 @@ int main()
 
 ### Software
 <p align="center">
-  <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/finite_state.png" width="100%" height="100%">
+  <img src="finite_state.png" width="100%" height="100%">
 </p> 
 
 * Unable to break from active mode to detect mode after writing value to STM32
@@ -154,7 +153,7 @@ int main()
 ### Hardware
 
 <p align="center">
-  <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/hardware.png" width="100%" height="100%">
+  <img src="hardware.png" width="100%" height="100%">
 </p> 
 
 * Sensor too sensitive
