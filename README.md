@@ -150,7 +150,7 @@ int main()
 
 1. Demo Video
 
-[![Demo1](https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_3312.png)](https://www.youtube.com/watch?v=gLq52RHsBsU)
+[![Demo1](https://github.com/TingWeiWong/Embedded-System/blob/master/youtube.png)](https://www.youtube.com/watch?v=p7qkj2737BU&feature=youtu.be)
 
 ## Reference
 
