@@ -138,19 +138,19 @@ int main()
 }
 ```
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_2.png" width="70%" height="70%">
-</p> 
+## Difficulties
 
-## 成果
+### Software
+
+
+### Hardware
+
+
+## Results
 
 1. Demo Video
 
 [![Demo1](https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_3312.png)](https://www.youtube.com/watch?v=gLq52RHsBsU)
-
-2. 閃避示範
-
-[![Demo2](https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_1313.png)](https://www.youtube.com/watch?v=SOX47pxRJZg&feature=youtu.be)
 
 ## Reference
 
