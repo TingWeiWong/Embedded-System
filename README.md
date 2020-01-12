@@ -141,12 +141,14 @@ int main()
 ## Difficulties
 
 ### Software
-
+<p align="center">
+  <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/finite_state.png" width="100%" height="100%">
+</p> 
 
 ### Hardware
 
 
-## Results
+## Result
 
 1. Demo Video
 
