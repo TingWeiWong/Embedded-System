@@ -25,8 +25,8 @@ alarms owner of trespassers.
 </p> 
 
 ### DC Motor
-	STM32 GPIO library with digital output
-	Use relay to turn on/off motor
+	* STM32 GPIO library with digital output
+	* Use relay to turn on/off motor
 ### Cardboard Gun
 
 ### Grove PIR Sensor
