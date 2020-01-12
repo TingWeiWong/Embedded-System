@@ -1,7 +1,7 @@
 # Automatic Firearm 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_1481.jpg" width="70%" height="70%">
+  <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/Cardboard-Gun.jpg" width="70%" height="70%">
 </p> 
 
 ## Motivation
