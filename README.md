@@ -7,7 +7,7 @@
 ## Motivation
 
 Inspired by the "Edna mode" scene in the movie "The Incredibles", we developed an automatic system that 
-alarms owner of trespassers.
+alarms owner of trespassers and attacks accordingly.
 
 ## Components
 
@@ -61,12 +61,16 @@ void on_data_written(const GattWriteCallbackParams *params) {
 ### Cardboard Gun
 
 ### Grove PIR Sensor
+* Digital Input at D5 pin 
+* Detects motion change within 6 meters and 120º angle
+* Outputs 1 if motion detected 0 otherwise
 
 ### Buzzer
+* Digital Output at D12 pin
+* 3V power supply required
+* Rings when digital output is high 
 
-### STM32IOT Node I 
-
-Main Function for Motor Control
+Function for Sensor and Buzzer 
 ```cpp
 
 DigitalOut buzzer(D12);
@@ -80,6 +84,15 @@ void irq_handler(void)
 {
     motion_detected = 1;
 }
+```
+
+
+
+### STM32IOT Node I 
+
+Main Function for Motor Control
+```cpp
+
 
 int main()
 {
@@ -124,41 +137,6 @@ int main()
     }
 }
 ```
-
-### 平衡原理
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_1.png" width="70%" height="70%">
-</p> 
-
-原理就是應用負反饋控制，由測量到的角度和自身平衡時的自然角度的差作為誤差，通過一個叫做PID的控制算法來控制電機轉速和轉向，偏離目標角度時，往前倒就向前跑一點，往後倒就向後跑一點，只要這個過程做的足夠快，參數合適，就能穩穩地站在原地。通過MPU6050檢測小車的角度作為PID 函數的輸入，設定一個平衡角度作為PID函數的目標值，然後把PID函數的輸出作為PWM值驅動電機。然而一般市售的平衡車其實不不穩定，仍然會出現小幅度顯而易見的晃動，因此我們希望在不修改硬體的情況下，實現軟體演算法的平衡，我們在陀螺儀的偵測上加上Kalman Filter，它是一種自回歸濾波器，能夠從一系列的不完全及包含雜訊的測量中，估計動態系統的狀態。卡爾曼濾波會根據各測量量在不同時間下的值，考慮各時間下的聯合分布，再產生對未知變數的估計，因此會比只以單一測量為基礎的估計方式要準。加上這個濾波器後，再調上適合這個平地或斜坡的參數，我們可以實現看起來像不動般停在原地，不論在平地或斜坡上都可以。
-
-### 超音波模組
-
-這次我們是使用HC-SR04的超音波模組來測距，其精準範圍為1cm ~ 400cm左
-右，其主要碰到的問題為他的廣度沒有辦法涵蓋小車，但我們嘗試在車子的左右各
-安裝一個卻發現會互相干擾，只能以伺服馬達的左右掃瞄來確立車子能夠通過是比   
-較麻煩的。再來由於rpi可能負荷太多外接模組導致電流有時候會不穩定，會出現異
-常的數值，因此我們還是有對超音波模組回傳的值做一個篩選、去掉極值及標準差
-比較大的值，此外，在電池電量較低的時候會直接失準，如果有偵測到直接失準程
-式要自己結束運行這些都是要被特別處理的部份。
-
-### 伺服馬達
-
-伺服馬達是用SG90，但RPI在使用伺服馬達會碰上一些問題。首先是控制能力
-，因為RPI的PWM並沒有特別的優化，因此效果是不甚滿意，在角度上面常常不 
-是那麼精準，但這可以事先校正解決。再來是電壓，因為伺服馬達需要更高的電壓
-5V，而RPI的電壓進來並沒有經過整流，所以穩定度很差，因此我們一開始直接用
-RPI是跑不起來伺服馬達的，後面接了電池座再接一個降壓穩流才有辦法控制。
-
-### 雙軸雲台
-
-此外，我們用一個雙軸雲台接上兩個伺服馬達來達到可以讓超音波模組
-和PiCamera來轉向，藉以判別左右的距離和物品，我們之後會參考助教的意見，在辨別圖片時用上下掃描來增加更多的判斷依據以達到更高的正確率。
-
-### Picamera辨識箭頭
-
-先用灰階的方式讀取，再用高斯分佈去模糊、canny演算法取邊緣去描繪輪廓。有了輪廓之後，用opencv的演算法去逼近成多邊形，取出箭頭的七個頂點座標，用我們的演算法去判定是不是箭頭。
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/NTUEE-ESLab/2018Fall-Self-Balancing-Robot/master/img/IMG_2.png" width="70%" height="70%">
