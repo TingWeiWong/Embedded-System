@@ -1,7 +1,7 @@
 # Automatic Firearm 
 
 <p align="center">
-  <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/Cardboard-Gun.jpg" width="70%" height="100%">
+  <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/Cardboard-Gun.jpg">
 </p> 
 
 ## Motivation
