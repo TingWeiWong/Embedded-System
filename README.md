@@ -20,7 +20,9 @@ alarms owner of trespassers.
 
 ## Structure
 
-裝有MPU6050，透過Kalman Filter的值使量出的加速度更精準，以及GB37帶測速馬達，和馬達驅動機TB6612FNG，使左右兩輪的值給的相同，如有速度偏差容易造成小車平衡不穩，容易翻倒，最重要的裝上藍芽接收器HC-06，實現和RPi溝通
+<p align="center">
+  <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/block-diagram.png" width="70%" height="100%">
+</p> 
 
 ### DC Motor
 
