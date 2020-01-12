@@ -151,6 +151,10 @@ int main()
 
 ### Hardware
 
+<p align="center">
+  <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/hardware.png" width="100%" height="100%">
+</p> 
+
 * Sensor too sensitive
 * Solution : Unplug after first siren
 
@@ -162,8 +166,8 @@ int main()
 
 ## Reference
 
-1. [51單片機平衡小車](https://item.taobao.com/item.htm?spm=a211ha.10565794.0.0.3cd53ca9aoSh6g&id=42913336181)
+1. [arm MBED](https://os.mbed.com/docs/mbed-os/v5.14/apis/index.html)
 
-2. [平衡車製作規格](http://wickedlabelectronics.com/self-balancing-robot-projects/)
+2. [stackoverflow](https://stackoverflow.com/)
 
-3. [PID演算法](https://blog.csdn.net/jsgaobiao/article/details/50643037)
+3. [amr mcl](https://www.youtube.com/user/MCIsection)
