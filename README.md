@@ -66,13 +66,64 @@ void on_data_written(const GattWriteCallbackParams *params) {
 
 ### STM32IOT Node I 
 
-有USB port，使電池座能夠穩定地降壓穩流輸出5V3A的電流，SG90伺服馬達兩組，實現雲台雙軸鏡頭的轉動，以及HC-SR04超音波模組實現遇到障礙物停止移動告訴camera開始辨識的功能，PiCamera搭配opencv實現便是箭頭指示的功能。
+Main Function for Motor Control
+```cpp
+
+DigitalOut buzzer(D12);
+
+InterruptIn motion(D5);
+
+
+int motion_detected = 0;
+ 
+void irq_handler(void)
+{
+    motion_detected = 1;
+}
+
+int main()
+{
+    relay = 1;
+    BLE &ble = BLE::Instance();
+    ble.onEventsToProcess(schedule_ble_events);
+
+    std::cout << "After on Events" << endl;
+
+    LEDDemo demo(ble, event_queue);
+
+    std::cout << "After demo " << endl;
+    std::cout << "BLE = " << (&ble) << endl;
+    // std::cout << "BLE data = " << ble.data << endl;
+    // printf("%d", ble);
+    demo.start();
+
+
+    return 0;
+}
+```
 
 
 ### STM32IOT Node II
-
-裝有MPU6050，透過Kalman Filter的值使量出的加速度更精準，以及GB37帶測速馬達，和馬達驅動機TB6612FNG，使左右兩輪的值給的相同，如有速度偏差容易造成小車平衡不穩，容易翻倒，最重要的裝上藍芽接收器HC-06，實現和RPi溝通
-
+Main Function for Buzzer Sensor Integration
+```cpp
+int main()
+{
+    int cnt = 0;
+    motion.rise(&irq_handler);  
+    while(1) {
+        if(motion_detected) {
+            cnt++;
+            motion_detected = 0;
+            printf("Hello! I've detected %d times since reset\n", cnt);
+            for (int i = 0; i < 11; i++) {
+                buzzer = i % 2;
+                cout << "Buzzer = " << buzzer << endl;
+                wait(1);
+            }
+        }
+    }
+}
+```
 
 ### 平衡原理
 
