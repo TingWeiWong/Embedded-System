@@ -6,46 +6,39 @@
 
 ## Motivation
 
-一般四輪車為車子的縮版，雖然具備馬力較強移動速度較快等優點，但實際需要靈活操作技巧的工作，其操作技巧難易度遠遠遜色於兩輪車，且兩輪車續航力較高，走路起來也較像人類兩條腿的走路方式，因此我們這一組想實踐兩輪車的實際製作，但這堂課的重點顯然不是在硬體製作，因此我們買來現有的平衡車，去對他做平衡性能的優化，以及加上我們的遇到障礙物被擋住後，相機開啟偵測方向的功能。
+Inspired by the "Edna mode" scene in the movie "The Incredibles", we developed an automatic system that 
+alarms owner of trespassers.
+
+## Components
+
+1. DC Motor
+2. Cardboard Gun
+3. Grove PIR Sensor
+4. Buzzer 
+5. STM32IOT Node I
+6. STM32IOT Node II
 
 ## Structure
 
 裝有MPU6050，透過Kalman Filter的值使量出的加速度更精準，以及GB37帶測速馬達，和馬達驅動機TB6612FNG，使左右兩輪的值給的相同，如有速度偏差容易造成小車平衡不穩，容易翻倒，最重要的裝上藍芽接收器HC-06，實現和RPi溝通
 
-### RPI
+### DC Motor
+
+### Cardboard Gun
+
+### Grove PIR Sensor
+
+### Buzzer
+
+### STM32IOT Node I 
 
 有USB port，使電池座能夠穩定地降壓穩流輸出5V3A的電流，SG90伺服馬達兩組，實現雲台雙軸鏡頭的轉動，以及HC-SR04超音波模組實現遇到障礙物停止移動告訴camera開始辨識的功能，PiCamera搭配opencv實現便是箭頭指示的功能。
 
 
-### Arduino
+### STM32IOT Node II
 
 裝有MPU6050，透過Kalman Filter的值使量出的加速度更精準，以及GB37帶測速馬達，和馬達驅動機TB6612FNG，使左右兩輪的值給的相同，如有速度偏差容易造成小車平衡不穩，容易翻倒，最重要的裝上藍芽接收器HC-06，實現和RPi溝通
 
-
-### 平衡車零件
-
-<table>
-   <tr>
-      <td></td>
-      <td colspan="5">Hardware</td>
-   </tr>
-   <tr>
-      <td>RPI</td>
-      <td>18650 Bat x3</td>
-      <td>USB port x1</td>
-      <td>SG90 x2</td>
-      <td>HC-SR04 x1</td>
-      <td>Camera x1</td>
-   </tr>
-   <tr>
-      <td>Arduino</td>
-      <td>18650 Bat x3</td>
-      <td>MPU6050 x1</td>
-      <td>GB37 x2</td>
-      <td>TB66 x1</td>
-      <td>HC-06 x1</td>
-   </tr>
-</table>
 
 ### 平衡原理
 
