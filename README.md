@@ -145,8 +145,14 @@ int main()
   <img src="https://github.com/TingWeiWong/Embedded-System/blob/master/finite_state.png" width="100%" height="100%">
 </p> 
 
+* Unable to break from active mode to detect mode after writing value to STM32
+* First attempt : Use finite state machine to transfer between two states
+* Solution : We separate the code into two STM32s 
+
 ### Hardware
 
+* Sensor too sensitive
+* Solution : Unplug after first siren
 
 ## Result
 
